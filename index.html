@@ -1,0 +1,623 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6fbf7">
+  <meta name="description" content="A friendly AI legal copilot for Indian education laws and regulations.">
+  <title>SATTVA | Education Law Copilot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f6faf6;
+      --white: #fffefa;
+      --ink: #243a34;
+      --muted: #71817a;
+      --line: #e4ece5;
+      --mint: #dff2e7;
+      --mint-strong: #37765e;
+      --sky: #e3f1f8;
+      --lilac: #eee8f7;
+      --butter: #fbf1ce;
+      --rose: #f8e5e0;
+      --shadow: 0 16px 44px rgba(56, 93, 75, .09);
+      --sans: "DM Sans", "Segoe UI", sans-serif;
+      --serif: "Fraunces", Georgia, serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 14px/1.5 var(--sans); }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, input:focus-visible, a:focus-visible { outline: 3px solid #8abda4; outline-offset: 3px; }
+    .app { min-height: 100vh; }
+    .app[hidden], .login-page[hidden] { display: none !important; }
+    .login-page { min-height: 100vh; display: flex; flex-direction: column; overflow: hidden; background: radial-gradient(ellipse at 78% 10%, #f9f2d9 0, transparent 30%), var(--paper); }
+    .login-topbar { width: min(1440px, 100%); height: 76px; flex: 0 0 auto; display: flex; align-items: center; justify-content: space-between; margin: 0 auto; padding: 0 42px; }
+    .login-context { display: flex; align-items: center; gap: 8px; color: #71817a; font-size: 11px; }
+    .login-context svg { width: 15px; height: 15px; color: #71937e; }
+    .login-main { width: min(1440px, 100%); flex: 1; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(360px, .9fr); align-items: center; gap: clamp(38px, 6vw, 88px); margin: 0 auto; padding: 12px 42px 34px; }
+    .login-art { min-height: 570px; height: min(700px, 75vh); position: relative; overflow: hidden; border: 1px solid #e2ebdf; border-radius: 24px; background: #e5efe5; box-shadow: var(--shadow); isolation: isolate; }
+    .login-art::after { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(180deg, rgba(229,242,231,.08) 15%, rgba(226,239,228,.78) 78%, #e7f2e7 100%), linear-gradient(120deg, rgba(229,242,231,.2), rgba(226,241,248,.22)); }
+    .login-art-image { width: 100%; height: 100%; position: absolute; z-index: -2; inset: 0; display: block; object-fit: cover; object-position: center; opacity: .88; }
+    .login-art-copy { position: absolute; right: 40px; bottom: 36px; left: 40px; max-width: 540px; }
+    .login-art-kicker { display: inline-flex; align-items: center; gap: 7px; padding: 7px 10px; border: 1px solid rgba(69,104,78,.14); border-radius: 999px; background: rgba(255,254,250,.78); color: #53775e; font-size: 10px; font-weight: 700; letter-spacing: .8px; text-transform: uppercase; }
+    .login-art-kicker svg { width: 14px; height: 14px; }
+    .login-art-copy h1 { max-width: 470px; margin: 15px 0 9px; font: 500 clamp(37px, 4.2vw, 57px)/1.03 var(--serif); }
+    .login-art-copy p { max-width: 420px; margin: 0; color: #526b5c; font-size: 13px; }
+    .login-art-caption { display: flex; align-items: center; gap: 8px; margin-top: 24px; color: #587560; font-size: 10px; font-weight: 600; }
+    .login-art-caption svg { width: 14px; height: 14px; }
+    .login-float { position: absolute; z-index: 1; width: 54px; height: 54px; display: grid; place-items: center; border: 1px solid rgba(77,105,82,.1); border-radius: 17px; background: rgba(255,254,250,.88); color: #54755f; box-shadow: 0 12px 30px rgba(56,93,75,.12); animation: bob 4.3s ease-in-out infinite; }
+    .login-float svg { width: 23px; height: 23px; stroke-width: 1.7; }
+    .login-float.books { top: 18%; left: 13%; background: #e4f2e8; }
+    .login-float.justice { top: 11%; right: 15%; background: #f9efd1; animation-delay: -1.6s; }
+    .login-float.school { top: 44%; right: 10%; background: #e7eff8; animation-delay: -2.4s; }
+    .login-panel { width: min(100%, 430px); margin: 0 auto; padding: 14px 8px; }
+    .login-greeting { color: #72917c; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+    .login-panel h2 { margin: 11px 0 6px; font: 500 34px/1.12 var(--serif); }
+    .login-panel > p { margin: 0 0 22px; color: var(--muted); font-size: 13px; }
+    .login-footer { width: min(1440px, 100%); display: flex; justify-content: space-between; gap: 16px; margin: 0 auto; padding: 0 42px 20px; color: #98a49c; font-size: 10px; }
+    .topbar { height: 76px; display: flex; align-items: center; justify-content: space-between; padding: 0 42px; border-bottom: 1px solid var(--line); background: rgba(255,254,250,.8); }
+    .brand { display: inline-flex; align-items: center; gap: 11px; color: inherit; text-decoration: none; }
+    .brand-mark { width: 38px; height: 38px; border-radius: 13px; display: grid; place-items: center; background: var(--mint); color: var(--mint-strong); }
+    .brand-copy { display: grid; line-height: 1.15; }
+    .brand-copy strong { font-size: 15px; letter-spacing: .1px; }
+    .brand-copy span { margin-top: 4px; color: var(--muted); font-size: 10px; letter-spacing: 1px; text-transform: uppercase; }
+    .top-right { display: flex; align-items: center; gap: 20px; }
+    .jurisdiction { display: flex; align-items: center; gap: 7px; color: #68766f; font-size: 12px; }
+    .jurisdiction .dot { width: 7px; height: 7px; border-radius: 50%; background: #75b08f; }
+    .avatar-button { border: 0; background: transparent; display: flex; align-items: center; gap: 10px; padding: 5px; cursor: pointer; }
+    .avatar { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; background: var(--butter); font-size: 17px; }
+    .avatar-label { text-align: left; font-size: 12px; font-weight: 600; }
+    .avatar-label small { display: block; color: var(--muted); font-size: 10px; font-weight: 400; }
+    .layout { max-width: 1440px; margin: 0 auto; padding: 30px 42px 56px; display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 42px; }
+    .sidebar { padding-top: 8px; }
+    .side-label { margin: 0 0 13px 12px; color: #94a19a; font-size: 10px; font-weight: 700; letter-spacing: 1.2px; text-transform: uppercase; }
+    .nav-list { display: grid; gap: 5px; }
+    .nav-link { min-height: 42px; padding: 0 12px; display: flex; align-items: center; gap: 11px; border-radius: 12px; color: #718079; text-decoration: none; font-size: 13px; transition: background .18s ease, color .18s ease, transform .18s ease; }
+    .nav-link:hover { background: #edf5ef; color: var(--ink); transform: translateX(2px); }
+    .nav-link.active { background: #e4f2e9; color: #346e56; font-weight: 700; }
+    .nav-link svg { width: 16px; height: 16px; stroke-width: 1.8; }
+    .sidebar-note { margin-top: 38px; padding: 15px 13px; border-top: 1px solid var(--line); color: var(--muted); font-size: 11px; }
+    .sidebar-note strong { display: block; margin: 0 0 5px; color: #53665d; font-size: 12px; }
+    .content { min-width: 0; }
+    .welcome-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; margin: 1px 0 24px; }
+    .eyebrow { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; color: #618471; font-size: 11px; font-weight: 700; letter-spacing: 1.1px; text-transform: uppercase; }
+    .eyebrow svg { width: 14px; height: 14px; }
+    h1 { margin: 0; font: 500 clamp(27px, 3vw, 38px)/1.12 var(--serif); letter-spacing: 0; }
+    .welcome-copy { margin: 8px 0 0; color: var(--muted); font-size: 13px; }
+    .date-chip { flex: 0 0 auto; display: flex; align-items: center; gap: 7px; padding: 8px 11px; border: 1px solid var(--line); border-radius: 999px; color: #6c7a73; background: rgba(255,254,250,.75); font-size: 11px; }
+    .date-chip svg { width: 14px; height: 14px; }
+    .hero { min-height: 296px; position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1fr) 33%; align-items: center; border: 1px solid #e0eee3; border-radius: 20px; background: #e8f4eb; box-shadow: var(--shadow); }
+    .hero-copy { position: relative; z-index: 1; max-width: 650px; padding: 32px 34px; }
+    .hero-tag { display: inline-flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid rgba(86,137,106,.15); border-radius: 999px; background: rgba(255,255,255,.5); color: #547b60; font-size: 10px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; }
+    .hero-tag svg { width: 13px; height: 13px; }
+    .hero h2 { max-width: 540px; margin: 14px 0 8px; font: 500 clamp(25px, 3vw, 35px)/1.18 var(--serif); }
+    .hero-copy > p { max-width: 455px; margin: 0; color: #61776a; font-size: 13px; }
+    .hero-image-wrap { height: 100%; min-height: 296px; position: relative; align-self: stretch; overflow: hidden; }
+    .hero-image-wrap::before { content: ""; position: absolute; z-index: 1; inset: 0 auto 0 0; width: 50%; background: linear-gradient(90deg, #e8f4eb 0%, rgba(232,244,235,.75) 35%, transparent 100%); }
+    .hero-image { width: 100%; height: 100%; object-fit: cover; object-position: 52% center; display: block; mix-blend-mode: multiply; opacity: .8; }
+    .hero-decor { position: absolute; width: 92px; height: 92px; right: 26px; top: 17px; border: 1px dashed rgba(86,137,106,.25); border-radius: 50%; animation: orbit 28s linear infinite; }
+    .hero-decor::after { content: "✦"; position: absolute; top: 5px; left: 9px; color: #d8ac4c; font-size: 16px; }
+    .companion { position: absolute; z-index: 2; right: 29%; bottom: 19px; width: 54px; height: 54px; display: grid; place-items: center; border: 4px solid rgba(255,255,255,.82); border-radius: 50%; background: #f4d89d; box-shadow: 0 8px 20px rgba(56,93,75,.12); font-size: 26px; animation: bob 3.8s ease-in-out infinite; }
+    .search-section { position: relative; z-index: 3; margin: -31px 28px 0; }
+    .search-shell { padding: 8px; border: 1px solid #e5e9df; border-radius: 16px; background: var(--white); box-shadow: 0 12px 30px rgba(55,82,67,.1); }
+    .search-form { min-height: 54px; display: flex; align-items: center; gap: 12px; padding-left: 12px; }
+    .search-form > svg { flex: 0 0 auto; width: 19px; height: 19px; color: #7e9a87; }
+    .search-form input { width: 100%; min-width: 0; border: 0; outline: 0; background: transparent; color: var(--ink); font-size: 14px; }
+    .search-form input::placeholder { color: #9aa8a0; }
+    .search-form button, .primary-button { min-height: 42px; flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 17px; border: 0; border-radius: 11px; background: #cfe8d7; color: #315f49; font-size: 12px; font-weight: 700; cursor: pointer; transition: background .2s ease, transform .2s ease; }
+    .search-form button:hover, .primary-button:hover { background: #bfe0ca; transform: translateY(-1px); }
+    .search-form button svg { width: 15px; height: 15px; }
+    .search-hint { display: flex; flex-wrap: wrap; gap: 7px; align-items: center; margin: 11px 3px 0; color: #819087; font-size: 10px; }
+    .suggestion { padding: 5px 9px; border: 1px solid #e9eee8; border-radius: 999px; background: rgba(255,254,250,.8); color: #68786f; cursor: pointer; font-size: 10px; transition: background .15s ease; }
+    .suggestion:hover { background: var(--mint); }
+    .response { display: none; margin: 14px 28px 0; padding: 17px 18px; border: 1px solid #dcebe0; border-radius: 14px; background: #f5fbf5; animation: rise .25s ease both; }
+    .response.visible { display: block; }
+    .response.fallback { border-color: #efe5c9; background: #fffbee; }
+    .response-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .response-label { display: flex; align-items: center; gap: 7px; color: #52735d; font-size: 11px; font-weight: 700; }
+    .response-label svg { width: 15px; height: 15px; }
+    .response-close { width: 28px; height: 28px; display: grid; place-items: center; border: 0; border-radius: 8px; background: transparent; color: #809087; cursor: pointer; }
+    .response-close:hover { background: #eaf3eb; }
+    .response-close svg { width: 15px; height: 15px; }
+    .response h3 { margin: 8px 0 4px; font-size: 14px; }
+    .response p { margin: 5px 0; color: #617168; font-size: 12px; }
+    .response cite { display: block; margin-top: 10px; color: #70867a; font-size: 10px; font-style: normal; }
+    .disclaimer { display: flex; align-items: flex-start; gap: 7px; margin: 12px 3px 0; color: #88958d; font-size: 10px; }
+    .disclaimer svg { flex: 0 0 auto; width: 13px; height: 13px; margin-top: 1px; }
+    .section-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; margin: 36px 0 15px; }
+    .section-kicker { margin: 0 0 3px; color: #85a08d; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; }
+    .section-heading h2 { margin: 0; font: 500 23px/1.2 var(--serif); }
+    .section-heading > a { display: inline-flex; align-items: center; gap: 5px; color: #648271; text-decoration: none; font-size: 11px; font-weight: 600; }
+    .section-heading > a:hover { color: #345d48; }
+    .section-heading > a svg { width: 14px; height: 14px; }
+    .law-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 13px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 7px; }
+    .filter-button { padding: 7px 11px; border: 1px solid #e2eae3; border-radius: 999px; background: transparent; color: #78877f; cursor: pointer; font-size: 10px; transition: all .15s ease; }
+    .filter-button:hover { background: #f0f6f0; }
+    .filter-button.selected { border-color: #cee3d3; background: #e6f3e9; color: #477258; font-weight: 700; }
+    .deck-controls { display: flex; gap: 6px; }
+    .icon-button { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid #e2eae3; border-radius: 50%; background: var(--white); color: #61796b; cursor: pointer; transition: background .15s ease, transform .15s ease; }
+    .icon-button:hover { background: #e8f3e9; transform: translateY(-1px); }
+    .icon-button svg { width: 15px; height: 15px; }
+    .law-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; }
+    .law-card { min-height: 218px; position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 16px; border: 1px solid rgba(94,119,102,.08); border-radius: 15px; box-shadow: 0 6px 18px rgba(56,93,75,.045); cursor: pointer; transition: transform .22s ease, box-shadow .22s ease; animation: rise .35s ease both; }
+    .law-card:hover { transform: translateY(-4px) rotate(-.3deg); box-shadow: 0 13px 23px rgba(56,93,75,.11); }
+    .law-card[hidden] { display: none; }
+    .law-card.mint-card { background: #e6f3e8; }
+    .law-card.sky-card { background: #e6f2f8; }
+    .law-card.rose-card { background: #faeae4; }
+    .law-card.lilac-card { background: #f0eaf7; }
+    .law-card.butter-card { background: #fbf2d9; }
+    .card-top { display: flex; align-items: center; justify-content: space-between; }
+    .law-icon { width: 35px; height: 35px; display: grid; place-items: center; border: 1px solid rgba(69,101,79,.1); border-radius: 11px; background: rgba(255,255,255,.55); color: #557661; }
+    .law-icon svg { width: 17px; height: 17px; }
+    .save-button { width: 30px; height: 30px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #77907e; cursor: pointer; }
+    .save-button:hover, .save-button.saved { background: rgba(255,255,255,.6); color: #bd7473; }
+    .save-button svg { width: 15px; height: 15px; }
+    .law-type { display: inline-flex; align-items: center; width: fit-content; margin-top: 14px; padding: 4px 7px; border-radius: 999px; background: rgba(255,255,255,.55); color: #687d6e; font-size: 9px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; }
+    .law-card h3 { margin: 7px 0 5px; font: 500 17px/1.12 var(--serif); }
+    .law-card p { margin: 0; color: #6c7a71; font-size: 10px; line-height: 1.5; }
+    .card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 12px; color: #6f8175; font-size: 9px; }
+    .card-bottom span:last-child { display: flex; align-items: center; gap: 4px; }
+    .card-bottom svg { width: 12px; height: 12px; }
+    .below-grid { display: grid; grid-template-columns: minmax(0, 1.45fr) minmax(220px, .8fr); gap: 14px; margin-top: 30px; }
+    .daily-note, .quick-panel { min-height: 118px; padding: 17px 19px; border: 1px solid var(--line); border-radius: 15px; background: rgba(255,254,250,.8); }
+    .daily-note { display: flex; align-items: center; gap: 16px; background: #fbf3da; border-color: #f1e8c9; }
+    .note-icon { width: 43px; height: 43px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 14px; background: rgba(255,255,255,.62); color: #a38242; }
+    .note-icon svg { width: 21px; height: 21px; }
+    .daily-note h3, .quick-panel h3 { margin: 0 0 4px; font: 500 16px var(--serif); }
+    .daily-note p, .quick-panel p { margin: 0; color: #79867e; font-size: 11px; }
+    .quick-panel { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .quick-panel .icon-button { flex: 0 0 auto; width: 37px; height: 37px; background: var(--mint); }
+    .footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 30px; padding-top: 14px; border-top: 1px solid var(--line); color: #99a49d; font-size: 10px; }
+    .footer a { color: #648271; text-decoration: underline; text-underline-offset: 2px; }
+    .toast { position: fixed; z-index: 20; right: 25px; bottom: 22px; max-width: min(360px, calc(100vw - 32px)); padding: 12px 15px; border: 1px solid #d9e9dc; border-radius: 12px; background: #fffefa; box-shadow: var(--shadow); color: #52715d; font-size: 12px; opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .2s ease, transform .2s ease; }
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .modal-backdrop { position: fixed; z-index: 30; inset: 0; display: none; place-items: center; padding: 18px; background: rgba(54,74,62,.22); backdrop-filter: blur(5px); }
+    .modal-backdrop.open { display: grid; animation: fade .18s ease both; }
+    .detail-modal { position: relative; width: min(490px, 100%); padding: 30px; border: 1px solid #e1eae2; border-radius: 20px; background: var(--white); box-shadow: 0 24px 70px rgba(45,69,55,.2); animation: rise .22s ease both; }
+    .modal-close { position: absolute; top: 13px; right: 13px; }
+    .detail-modal h2 { margin: 18px 0 5px; font: 500 27px var(--serif); }
+    .auth-tabs { display: grid; grid-template-columns: 1fr 1fr; padding: 4px; border-radius: 11px; background: #f1f5f1; }
+    .auth-tab { min-height: 35px; border: 0; border-radius: 8px; background: transparent; color: #7b8880; cursor: pointer; font-size: 12px; }
+    .auth-tab.active { background: white; color: #44674f; box-shadow: 0 2px 8px rgba(60,83,65,.08); font-weight: 700; }
+    .auth-form { display: grid; gap: 12px; margin-top: 17px; }
+    .auth-form label { display: grid; gap: 6px; color: #64736a; font-size: 11px; font-weight: 600; }
+    .auth-form input { height: 42px; padding: 0 12px; border: 1px solid #e1e8e1; border-radius: 9px; background: white; color: var(--ink); }
+    .auth-form .primary-button { width: 100%; margin-top: 3px; }
+    .auth-footnote { margin-top: 14px; text-align: center; color: #9aa49d; font-size: 10px; }
+    .detail-modal .law-type { margin-top: 17px; }
+    .detail-modal h2 { margin-top: 9px; }
+    .detail-modal .detail-summary { color: #586c60; font-size: 13px; }
+    .detail-meta { margin-top: 18px; padding-top: 13px; border-top: 1px solid var(--line); color: #718078; font-size: 11px; }
+    .detail-source { display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; color: #527b61; font-size: 12px; font-weight: 700; text-decoration: underline; text-underline-offset: 3px; }
+    .detail-source svg { width: 14px; height: 14px; }
+    .detail-modal .primary-button { margin-top: 18px; }
+    @keyframes bob { 0%,100% { transform: translateY(0) rotate(-4deg); } 50% { transform: translateY(-7px) rotate(4deg); } }
+    @keyframes orbit { to { transform: rotate(360deg); } }
+    @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+    @media (max-width: 1050px) {
+      .layout { padding-right: 28px; padding-left: 28px; grid-template-columns: 160px minmax(0, 1fr); gap: 26px; }
+      .law-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .hero { grid-template-columns: minmax(0, 1fr) 28%; }
+    }
+    @media (max-width: 720px) {
+      .login-topbar { height: 64px; padding: 0 18px; }
+      .login-context { font-size: 0; }
+      .login-context svg { width: 18px; height: 18px; }
+      .login-main { display: flex; flex-direction: column; align-items: stretch; gap: 13px; padding: 8px 18px 24px; }
+      .login-art { min-height: 0; height: 245px; flex: 0 0 auto; border-radius: 19px; }
+      .login-art-copy { right: 20px; bottom: 18px; left: 20px; }
+      .login-art-copy h1 { max-width: 330px; margin: 10px 0 5px; font-size: 30px; }
+      .login-art-copy p { max-width: 360px; font-size: 11px; }
+      .login-art-caption { display: none; }
+      .login-float { width: 42px; height: 42px; border-radius: 14px; }
+      .login-float svg { width: 19px; height: 19px; }
+      .login-float.books { top: 17px; left: 18px; }
+      .login-float.justice { top: 18px; right: 19px; }
+      .login-float.school { top: 82px; right: 17px; }
+      .login-panel { padding: 8px 4px 16px; }
+      .login-panel h2 { margin-top: 6px; font-size: 28px; }
+      .login-panel > p { margin-bottom: 14px; font-size: 12px; }
+      .login-footer { padding: 0 18px 14px; font-size: 9px; }
+      .topbar { height: 66px; padding: 0 18px; }
+      .jurisdiction, .avatar-label { display: none; }
+      .layout { display: block; padding: 20px 17px 40px; }
+      .sidebar { position: sticky; z-index: 10; top: 0; margin: -20px -17px 20px; padding: 8px 14px; overflow-x: auto; border-bottom: 1px solid var(--line); background: rgba(246,250,246,.95); backdrop-filter: blur(8px); }
+      .sidebar { scrollbar-width: none; }
+      .sidebar::-webkit-scrollbar { display: none; }
+      .side-label, .sidebar-note { display: none; }
+      .nav-list { display: flex; width: max-content; gap: 4px; }
+      .nav-link { min-height: 36px; padding: 0 10px; white-space: nowrap; font-size: 11px; }
+      .nav-link svg { width: 14px; height: 14px; }
+      .welcome-row { align-items: flex-start; margin: 3px 0 17px; }
+      .date-chip { display: none; }
+      h1 { font-size: 30px; }
+      .hero { min-height: 260px; grid-template-columns: 1fr; }
+      .hero-copy { padding: 23px 21px 85px; }
+      .hero h2 { max-width: 400px; font-size: 29px; }
+      .hero-copy > p { max-width: 370px; font-size: 12px; }
+      .hero-image-wrap { position: absolute; right: 0; bottom: 0; width: 43%; height: 126px; min-height: 0; opacity: .48; }
+      .hero-image-wrap::before { width: 55%; background: linear-gradient(90deg,#e8f4eb,transparent); }
+      .companion { right: 24%; bottom: 13px; width: 46px; height: 46px; font-size: 22px; }
+      .hero-decor { width: 62px; height: 62px; right: 12px; top: 10px; }
+      .search-section { margin: -27px 12px 0; }
+      .search-form { gap: 8px; padding-left: 8px; }
+      .search-form input { font-size: 12px; }
+      .search-form button { width: 43px; padding: 0; font-size: 0; }
+      .search-form button svg { width: 17px; height: 17px; }
+      .response { margin-right: 12px; margin-left: 12px; }
+      .section-heading { margin-top: 31px; }
+      .law-grid { gap: 10px; }
+      .law-card { min-height: 214px; padding: 13px; }
+      .law-card h3 { font-size: 16px; }
+      .law-toolbar { align-items: flex-start; }
+      .filters { gap: 5px; }
+      .filter-button { padding: 6px 8px; font-size: 9px; }
+      .deck-controls { flex: 0 0 auto; }
+      .below-grid { grid-template-columns: 1fr; margin-top: 23px; }
+      .footer { flex-direction: column; }
+    }
+    @media (max-width: 390px) {
+      .layout { padding-right: 13px; padding-left: 13px; }
+      .sidebar { margin-right: -13px; margin-left: -13px; }
+      .law-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .law-card { min-height: 225px; padding: 11px; }
+      .card-bottom { font-size: 8px; }
+      .filters { max-width: 275px; }
+      .section-heading h2 { font-size: 21px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <section class="login-page" id="login-page" aria-label="SATTVA sign in">
+    <header class="login-topbar">
+      <a class="brand" href="#login-page" aria-label="SATTVA home">
+        <span class="brand-mark"><i data-lucide="scale"></i></span>
+        <span class="brand-copy"><strong>SATTVA</strong><span>Education law copilot</span></span>
+      </a>
+      <div class="login-context"><i data-lucide="map-pin"></i>India · Education</div>
+    </header>
+    <main class="login-main">
+      <section class="login-art" aria-label="Books, education, and justice">
+        <img class="login-art-image" src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&w=1400&q=85" alt="Shelves of books in a library">
+        <span class="login-float books" aria-hidden="true"><i data-lucide="book-open"></i></span>
+        <span class="login-float justice" aria-hidden="true"><i data-lucide="scale"></i></span>
+        <span class="login-float school" aria-hidden="true"><i data-lucide="landmark"></i></span>
+        <div class="login-art-copy">
+          <span class="login-art-kicker"><i data-lucide="sparkles"></i>For the people who teach</span>
+          <h1>Knowledge builds<br>fairer classrooms.</h1>
+          <p>Clear, thoughtful guidance on the rights and rules that help protect every learner.</p>
+          <div class="login-art-caption"><i data-lucide="scale"></i>Education · rights · justice</div>
+        </div>
+      </section>
+      <section class="login-panel" aria-labelledby="auth-title">
+        <span class="login-greeting">Your SATTVA workspace</span>
+        <h2 id="auth-title">Welcome back.</h2>
+        <p>Sign in to explore Indian education law with a little more clarity.</p>
+        <div class="auth-tabs" role="tablist" aria-label="Account access">
+          <button class="auth-tab active" type="button" role="tab" aria-selected="true" data-auth-mode="login">Log in</button>
+          <button class="auth-tab" type="button" role="tab" aria-selected="false" data-auth-mode="signup">Sign up</button>
+        </div>
+        <form class="auth-form" id="auth-form">
+          <label>Email address<input id="auth-email" type="email" name="email" autocomplete="email" placeholder="you@school.org" required></label>
+          <label>Password<input type="password" name="password" autocomplete="current-password" placeholder="At least 8 characters" minlength="8" required></label>
+          <button class="primary-button" type="submit" id="auth-submit">Enter portal <i data-lucide="arrow-right"></i></button>
+        </form>
+        <div class="auth-footnote">Preview only · Sign-in is not connected to an account service</div>
+      </section>
+    </main>
+    <footer class="login-footer"><span>SATTVA · Indian education law copilot</span><span>For general information, not legal advice</span></footer>
+  </section>
+
+  <div class="app" id="portal" hidden>
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="SATTVA home">
+        <span class="brand-mark"><i data-lucide="scale"></i></span>
+        <span class="brand-copy"><strong>SATTVA</strong><span>Education law copilot</span></span>
+      </a>
+      <div class="top-right">
+        <div class="jurisdiction"><span class="dot"></span> Indian jurisdiction</div>
+        <button class="avatar-button" type="button" id="open-auth" aria-label="Sign out">
+          <span class="avatar">🌼</span><span class="avatar-label"><span id="user-name">Educator</span><small>Sign out</small></span>
+        </button>
+      </div>
+    </header>
+
+    <div class="layout" id="home">
+      <aside class="sidebar" aria-label="Main navigation">
+        <p class="side-label">Workspace</p>
+        <nav class="nav-list">
+          <a class="nav-link active" href="#home"><i data-lucide="layout-dashboard"></i>Overview</a>
+          <a class="nav-link" href="#law-library"><i data-lucide="library"></i>Law library</a>
+          <a class="nav-link" href="#saved-laws" data-filter-link="saved"><i data-lucide="bookmark"></i>Saved laws</a>
+          <a class="nav-link" href="#recent-activity"><i data-lucide="clock-3"></i>Recent activity</a>
+        </nav>
+        <div class="sidebar-note"><strong>A thoughtful first step</strong>Get oriented with trusted education-law references, then check the original source.</div>
+      </aside>
+
+      <main class="content">
+        <div class="welcome-row">
+          <div>
+            <div class="eyebrow"><i data-lucide="sparkles"></i>Your friendly legal desk</div>
+            <h1>Smart Advocate in<br>Education Sector</h1>
+            <p class="welcome-copy">A little more clarity for the people who help students thrive.</p>
+          </div>
+          <div class="date-chip"><i data-lucide="map-pin"></i>India · Education</div>
+        </div>
+
+        <section class="hero" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <span class="hero-tag"><i data-lucide="book-open-check"></i>Rights, made clearer</span>
+            <h2 id="hero-title">Good questions make<br>stronger classrooms.</h2>
+            <p>Your AI copilot for Indian education rights and regulations. Start with a question, leave with a clearer next step.</p>
+          </div>
+          <div class="hero-image-wrap" aria-hidden="true">
+            <img class="hero-image" src="https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=900&q=80" alt="">
+          </div>
+          <div class="hero-decor" aria-hidden="true"></div>
+          <div class="companion" title="Mitra, your education law guide" aria-label="Mitra, your education law guide">📚</div>
+        </section>
+
+        <section class="search-section" aria-label="Ask the legal copilot">
+          <div class="search-shell">
+            <form class="search-form" id="search-form">
+              <i data-lucide="search" aria-hidden="true"></i>
+              <input id="legal-query" type="search" autocomplete="off" placeholder="Ask about a school right, act, or guideline..." aria-label="Ask about Indian education law">
+              <button type="submit"><i data-lucide="arrow-up-right"></i>Ask Mitra</button>
+            </form>
+          </div>
+          <div class="search-hint"><span>Try:</span>
+            <button class="suggestion" type="button" data-query="What does the RTE Act say about age?">RTE age group</button>
+            <button class="suggestion" type="button" data-query="What should a school do under POCSO?">POCSO in schools</button>
+            <button class="suggestion" type="button" data-query="Is NEP 2020 a law?">NEP 2020</button>
+          </div>
+          <div class="response" id="response" role="status" aria-live="polite">
+            <div class="response-head"><div class="response-label"><i data-lucide="messages-square"></i><span id="response-label">Mitra's quick guide</span></div><button class="response-close" id="close-response" type="button" aria-label="Close response"><i data-lucide="x"></i></button></div>
+            <h3 id="response-title"></h3><p id="response-body"></p><cite id="response-cite"></cite>
+          </div>
+          <p class="disclaimer"><i data-lucide="info"></i>For general information, not legal advice. Verify current law and consult a qualified Indian lawyer for decisions about a specific case.</p>
+        </section>
+
+        <section id="law-library" aria-labelledby="library-title">
+          <div class="section-heading">
+            <div><p class="section-kicker">A good place to begin</p><h2 id="library-title">The law shelf</h2></div>
+            <a href="#law-library" id="view-all">Explore the library <i data-lucide="arrow-right"></i></a>
+          </div>
+          <div class="law-toolbar">
+            <div class="filters" role="group" aria-label="Filter laws">
+              <button class="filter-button selected" type="button" data-filter="all">All topics</button>
+              <button class="filter-button" type="button" data-filter="foundational">Foundational rights</button>
+              <button class="filter-button" type="button" data-filter="safeguarding">Safeguarding</button>
+              <button class="filter-button" type="button" data-filter="policy">Policy</button>
+            </div>
+            <div class="deck-controls"><button class="icon-button" type="button" id="prev-laws" title="Previous laws" aria-label="Previous laws"><i data-lucide="arrow-left"></i></button><button class="icon-button" type="button" id="next-laws" title="Next laws" aria-label="Next laws"><i data-lucide="arrow-right"></i></button></div>
+          </div>
+          <div class="law-grid" id="law-grid" aria-live="polite"></div>
+        </section>
+
+        <section class="below-grid" id="recent-activity">
+          <div class="daily-note">
+            <span class="note-icon"><i data-lucide="lightbulb"></i></span>
+            <div><h3>A note on NEP 2020</h3><p>It is a national policy framework, not an Act of Parliament. Policy goals do not automatically create enforceable individual rights.</p></div>
+          </div>
+          <div class="quick-panel" id="saved-laws">
+            <div><h3>Your reading list</h3><p id="saved-count">No laws saved yet. Tap a bookmark to keep one close.</p></div>
+            <button class="icon-button" type="button" id="show-saved" aria-label="Show saved laws" title="Show saved laws"><i data-lucide="bookmark-check"></i></button>
+          </div>
+        </section>
+
+        <footer class="footer">
+          <span>Curated starter guides; the linked Ministry-filtered catalog currently shows no records.</span>
+          <span><a href="https://www.india.gov.in/my-government/acts-and-rules?ministry=Ministry%20of%20Education" target="_blank" rel="noopener noreferrer">Ministry of Education Acts &amp; Rules</a> · <a href="https://www.indiacode.nic.in/" target="_blank" rel="noopener noreferrer">India Code</a></span>
+          <span>Built for clarity, not a substitute for counsel</span>
+        </footer>
+      </main>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="modal-backdrop" id="detail-backdrop" role="presentation">
+    <section class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+      <button class="icon-button modal-close" type="button" data-close-modal aria-label="Close law details"><i data-lucide="x"></i></button>
+      <span class="law-icon" id="detail-icon"><i data-lucide="book-open"></i></span>
+      <span class="law-type" id="detail-type"></span>
+      <h2 id="detail-title"></h2><p class="detail-summary" id="detail-summary"></p>
+      <div class="detail-meta" id="detail-meta"></div>
+      <a class="detail-source" id="detail-source" target="_blank" rel="noopener noreferrer"><i data-lucide="external-link"></i></a>
+      <button class="primary-button" type="button" id="ask-about-law">Ask Mitra about this <i data-lucide="arrow-up-right"></i></button>
+    </section>
+  </div>
+
+  <script>
+    // Structured legal records are intentionally API-shaped for a future Java service.
+    const LEGAL_LIBRARY = [
+      { id: "rte", title: "Right to Education Act", short: "Right to Education", year: "2009", citation: "Right of Children to Free and Compulsory Education Act, 2009", type: "Central Act", category: "foundational", color: "mint-card", icon: "book-open-check", summary: "Provides for free and compulsory elementary education for children aged 6 to 14, subject to the Act's provisions.", detail: "The Act operationalizes the constitutional right under Article 21A. It sets duties for governments and local authorities, and includes requirements for schools. Exact applicability can depend on the institution and provision.", sourceUrl: "https://indiacode.gov.in/act/f56d1ae7-9bbb-40cd-95ab-193eb5a5daaa", sourceLabel: "View official Act on India Code", keywords: ["rte", "right to education", "free education", "age group", "age", "admission", "25 percent", "25%", "elementary education"] },
+      { id: "article-21a", title: "Article 21A", short: "Article 21A", year: "2002", citation: "Constitution of India, Article 21A", type: "Constitutional right", category: "foundational", color: "sky-card", icon: "landmark", summary: "Recognizes a fundamental right to free and compulsory education for children aged 6 to 14, as provided by law.", detail: "Article 21A was inserted by the Constitution (Eighty-sixth Amendment) Act, 2002. Parliament enacted the RTE Act, 2009 to provide the legal framework for its implementation.", sourceUrl: "https://indiacode.gov.in/document-grid/d5475e8d-1998-4ac8-8694-82f941074bb7", sourceLabel: "View Constitution on India Code", keywords: ["article 21a", "21a", "fundamental right", "constitution", "constitutional", "education right"] },
+      { id: "pocso", title: "POCSO in schools", short: "POCSO Act", year: "2012", citation: "Protection of Children from Sexual Offences Act, 2012, including section 19", type: "Central Act · Safeguarding", category: "safeguarding", color: "rose-card", icon: "heart-handshake", summary: "The Act protects children from sexual offences. Section 19 requires reporting when a person has knowledge of, or apprehension about, an offence under the Act.", detail: "Schools should have child-protection processes that prioritize the child's safety, privacy, and dignity. POCSO reporting duties are statutory; follow current law and official child-protection procedures. Do not investigate or confront a suspected offender yourself.", sourceUrl: "https://indiacode.gov.in/act/60dad1b9-bbf1-4310-8fa1-62643beab7a6", sourceLabel: "View official Act on India Code", keywords: ["pocso", "child safety", "child protection", "sexual abuse", "reporting", "mandatory reporting", "school safeguarding"] },
+      { id: "nep", title: "National Education Policy", short: "NEP 2020", year: "2020", citation: "National Education Policy 2020", type: "Policy framework", category: "policy", color: "lilac-card", icon: "notebook-pen", summary: "A national policy framework describing education priorities and proposed reforms. It is not, by itself, an Act of Parliament.", detail: "NEP 2020 guides policy direction. Individual proposals may need legislation, rules, or government action before they take legal effect. It does not independently create an enforceable right in every instance.", sourceUrl: "https://www.education.gov.in/nep", sourceLabel: "View policy at the Ministry of Education", keywords: ["nep", "nep 2020", "national education policy", "policy", "new education policy"] },
+      { id: "child-labour", title: "Child and Adolescent Labour", short: "Child labour law", year: "1986", citation: "Child and Adolescent Labour (Prohibition and Regulation) Act, 1986, as amended", type: "Central Act", category: "safeguarding", color: "butter-card", icon: "shield-check", summary: "Prohibits employment of children in all occupations and processes, with statutory definitions and limited exceptions.", detail: "The amended Act distinguishes children from adolescents and sets prohibitions and conditions. The facts and applicable exceptions matter; consult the current text and competent authorities for a specific situation.", sourceUrl: "https://indiacode.gov.in/act/1fe940f9-b6ed-4d97-871c-587007b16632", sourceLabel: "View official Act on India Code", keywords: ["child labour", "adolescent labour", "employment", "work", "prohibition"] },
+      { id: "rpwd", title: "Rights of Persons with Disabilities", short: "RPwD Act", year: "2016", citation: "Rights of Persons with Disabilities Act, 2016", type: "Central Act · Inclusion", category: "foundational", color: "sky-card", icon: "accessibility", summary: "Provides rights and protections for persons with disabilities, including provisions relating to inclusive education.", detail: "The Act includes duties concerning non-discrimination and inclusive education. Specific duties and remedies depend on the institution, applicable rules, and the circumstances.", sourceUrl: "https://indiacode.gov.in/act/a2ccc006-552f-4598-886f-217d79088b9d", sourceLabel: "View official Act on India Code", keywords: ["disability", "disabled", "inclusive education", "accessibility", "reasonable accommodation", "rpwd", "special needs"] }
+    ];
+    const OUT_OF_SCOPE = "I am specialized exclusively in Indian Educational Laws & Regulations. Please ask a question related to education sector legal guidelines.";
+    const savedIds = new Set();
+    const recentQueries = [];
+    const lawGrid = document.getElementById("law-grid");
+    let activeFilter = "all";
+    let activeDetail = null;
+    let toastTimer;
+
+    function renderIcons() {
+      if (window.lucide) window.lucide.createIcons();
+    }
+    function toast(message) {
+      const node = document.getElementById("toast");
+      node.textContent = message;
+      node.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => node.classList.remove("show"), 2600);
+    }
+    function renderLaws() {
+      const records = LEGAL_LIBRARY.filter((law) => activeFilter === "saved" ? savedIds.has(law.id) : activeFilter === "all" || law.category === activeFilter);
+      lawGrid.innerHTML = records.map((law) => `
+        <article class="law-card ${law.color}" data-law-id="${law.id}" tabindex="0" aria-label="Read about ${law.title}">
+          <div class="card-top"><span class="law-icon"><i data-lucide="${law.icon}"></i></span><button class="save-button ${savedIds.has(law.id) ? "saved" : ""}" type="button" data-save-id="${law.id}" aria-label="${savedIds.has(law.id) ? "Remove saved" : "Save"} ${law.title}" aria-pressed="${savedIds.has(law.id)}"><i data-lucide="${savedIds.has(law.id) ? "bookmark-check" : "bookmark"}"></i></button></div>
+          <span class="law-type">${law.type}</span><h3>${law.title}</h3><p>${law.summary}</p>
+          <div class="card-bottom"><span>${law.year}</span><span>Read guide <i data-lucide="arrow-up-right"></i></span></div>
+        </article>`).join("");
+      document.getElementById("saved-count").textContent = savedIds.size ? `${savedIds.size} ${savedIds.size === 1 ? "law" : "laws"} saved to your reading list.` : "No laws saved yet. Tap a bookmark to keep one close.";
+      renderIcons();
+    }
+    function showResponse({ title, body, citation = "", fallback = false }) {
+      const response = document.getElementById("response");
+      response.classList.toggle("fallback", fallback);
+      response.classList.add("visible");
+      document.getElementById("response-label").textContent = fallback ? "A gentle redirect" : "Mitra's quick guide";
+      document.getElementById("response-title").textContent = title;
+      document.getElementById("response-body").textContent = body;
+      document.getElementById("response-cite").textContent = citation;
+      response.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      renderIcons();
+    }
+    function searchLegal(query) {
+      const normalized = query.trim().toLowerCase();
+      if (!normalized) {
+        document.getElementById("legal-query").focus();
+        toast("Type a question to get started.");
+        return;
+      }
+      recentQueries.unshift(query.trim());
+      if (recentQueries.length > 5) recentQueries.pop();
+      const educationalContext = /\b(education|educational|school|schools|student|students|teacher|teachers|child|children|classroom|college|university|rte|pocso|nep|article 21a|education act|admission|inclusive education|child labour)\b/.test(normalized);
+      const match = LEGAL_LIBRARY.find((law) => law.keywords.some((keyword) => normalized.includes(keyword)));
+      if (!educationalContext) {
+        showResponse({ title: OUT_OF_SCOPE, body: "Mitra can help with Indian education-sector legal guidelines, including school rights, child safeguarding, and inclusion.", fallback: true });
+      } else if (match) {
+        showResponse({ title: match.short, body: match.summary + " " + match.detail, citation: "Reference: " + match.citation + ". Check the current official text for your situation." });
+      } else {
+        showResponse({ title: "Let's narrow this down", body: "This sounds education-related, but I couldn't match it confidently to a guide in this prototype. Try naming an Act or topic, such as RTE, Article 21A, POCSO, disability inclusion, or NEP 2020.", citation: "This prototype uses a small curated reference shelf, not a live legal database." });
+      }
+    }
+    function openDetail(law) {
+      activeDetail = law;
+      document.getElementById("detail-icon").innerHTML = `<i data-lucide="${law.icon}"></i>`;
+      document.getElementById("detail-type").textContent = law.type;
+      document.getElementById("detail-title").textContent = law.title;
+      document.getElementById("detail-summary").textContent = law.detail;
+      document.getElementById("detail-meta").textContent = `India · ${law.year} · ${law.citation}`;
+      const sourceLink = document.getElementById("detail-source");
+      sourceLink.href = law.sourceUrl;
+      sourceLink.innerHTML = `${law.sourceLabel} <i data-lucide="external-link"></i>`;
+      document.getElementById("detail-backdrop").classList.add("open");
+      renderIcons();
+    }
+    function closeModals() {
+      document.querySelectorAll(".modal-backdrop").forEach((modal) => modal.classList.remove("open"));
+    }
+
+    document.getElementById("search-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      searchLegal(document.getElementById("legal-query").value);
+    });
+    document.querySelectorAll(".suggestion").forEach((button) => button.addEventListener("click", () => {
+      document.getElementById("legal-query").value = button.dataset.query;
+      searchLegal(button.dataset.query);
+    }));
+    document.getElementById("close-response").addEventListener("click", () => document.getElementById("response").classList.remove("visible"));
+    document.querySelectorAll(".filter-button").forEach((button) => button.addEventListener("click", () => {
+      activeFilter = button.dataset.filter;
+      document.querySelectorAll(".filter-button").forEach((filter) => filter.classList.toggle("selected", filter === button));
+      renderLaws();
+    }));
+    lawGrid.addEventListener("click", (event) => {
+      const saveButton = event.target.closest("[data-save-id]");
+      if (saveButton) {
+        event.stopPropagation();
+        const id = saveButton.dataset.saveId;
+        savedIds.has(id) ? savedIds.delete(id) : savedIds.add(id);
+        renderLaws();
+        return;
+      }
+      const card = event.target.closest("[data-law-id]");
+      if (card) openDetail(LEGAL_LIBRARY.find((law) => law.id === card.dataset.lawId));
+    });
+    lawGrid.addEventListener("keydown", (event) => {
+      if ((event.key === "Enter" || event.key === " ") && event.target.matches("[data-law-id]")) {
+        event.preventDefault();
+        openDetail(LEGAL_LIBRARY.find((law) => law.id === event.target.dataset.lawId));
+      }
+    });
+    document.querySelectorAll("[data-filter-link]").forEach((link) => link.addEventListener("click", () => {
+      activeFilter = "saved";
+      document.querySelectorAll(".filter-button").forEach((filter) => filter.classList.remove("selected"));
+      renderLaws();
+      if (!savedIds.size) toast("Save a law with the bookmark to build your reading list.");
+    }));
+    document.getElementById("show-saved").addEventListener("click", () => {
+      activeFilter = "saved";
+      document.querySelectorAll(".filter-button").forEach((filter) => filter.classList.remove("selected"));
+      renderLaws();
+      document.getElementById("law-library").scrollIntoView({ behavior: "smooth" });
+      if (!savedIds.size) toast("Save a law with the bookmark to build your reading list.");
+    });
+    document.getElementById("view-all").addEventListener("click", () => {
+      activeFilter = "all";
+      document.querySelectorAll(".filter-button").forEach((filter) => filter.classList.toggle("selected", filter.dataset.filter === "all"));
+      renderLaws();
+    });
+    document.getElementById("next-laws").addEventListener("click", () => lawGrid.scrollBy({ left: lawGrid.clientWidth * .7, behavior: "smooth" }));
+    document.getElementById("prev-laws").addEventListener("click", () => lawGrid.scrollBy({ left: -lawGrid.clientWidth * .7, behavior: "smooth" }));
+    document.getElementById("open-auth").addEventListener("click", () => {
+      document.getElementById("portal").hidden = true;
+      document.getElementById("login-page").hidden = false;
+      document.getElementById("auth-form").reset();
+      document.querySelector('[data-auth-mode="login"]').click();
+      document.getElementById("auth-email").focus();
+      toast("Signed out. Your prototype session has ended.");
+    });
+    document.querySelectorAll("[data-close-modal]").forEach((button) => button.addEventListener("click", closeModals));
+    document.querySelectorAll(".modal-backdrop").forEach((backdrop) => backdrop.addEventListener("click", (event) => { if (event.target === backdrop) closeModals(); }));
+    document.addEventListener("keydown", (event) => { if (event.key === "Escape") closeModals(); });
+    document.querySelectorAll("[data-auth-mode]").forEach((tab) => tab.addEventListener("click", () => {
+      document.querySelectorAll("[data-auth-mode]").forEach((item) => { const selected = item === tab; item.classList.toggle("active", selected); item.setAttribute("aria-selected", String(selected)); });
+      document.getElementById("auth-submit").innerHTML = tab.dataset.authMode === "signup" ? 'Create account <i data-lucide="arrow-right"></i>' : 'Enter portal <i data-lucide="arrow-right"></i>';
+      renderIcons();
+    }));
+    document.getElementById("auth-form").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const mode = document.querySelector("[data-auth-mode].active").dataset.authMode;
+      const email = new FormData(event.currentTarget).get("email").toString();
+      document.getElementById("user-name").textContent = email.split("@")[0];
+      document.getElementById("portal").hidden = false;
+      document.getElementById("login-page").hidden = true;
+      window.scrollTo(0, 0);
+      toast(mode === "signup" ? "Your prototype account is ready." : "You are signed in for this preview.");
+      event.currentTarget.reset();
+    });
+    document.getElementById("ask-about-law").addEventListener("click", () => {
+      if (!activeDetail) return;
+      const law = activeDetail;
+      closeModals();
+      document.getElementById("legal-query").value = `Tell me about ${law.short} in schools`;
+      searchLegal(document.getElementById("legal-query").value);
+      document.getElementById("legal-query").focus({ preventScroll: true });
+    });
+    document.querySelectorAll(".nav-link").forEach((link) => link.addEventListener("click", () => {
+      document.querySelectorAll(".nav-link").forEach((item) => item.classList.toggle("active", item === link));
+    }));
+
+    renderLaws();
+    renderIcons();
+  </script>
+</body>
+</html>
