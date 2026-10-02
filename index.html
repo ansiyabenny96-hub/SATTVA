@@ -145,8 +145,8 @@
     .icon-button { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid #e2eae3; border-radius: 50%; background: var(--white); color: #61796b; cursor: pointer; transition: background .15s ease, transform .15s ease; }
     .icon-button:hover { background: #e8f3e9; transform: translateY(-1px); }
     .icon-button svg { width: 15px; height: 15px; }
-    .law-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px; }
-    .law-card { min-height: 218px; position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 16px; border: 1px solid rgba(94,119,102,.08); border-radius: 15px; box-shadow: 0 6px 18px rgba(56,93,75,.045); cursor: pointer; transition: transform .22s ease, box-shadow .22s ease; animation: rise .35s ease both; }
+    .law-grid { display: grid; grid-auto-flow: column; grid-auto-columns: 210px; gap: 13px; overflow-x: auto; padding: 4px 2px 14px; overscroll-behavior-x: contain; scroll-padding-inline: 2px; scroll-snap-type: x mandatory; scrollbar-color: #c7dccb transparent; scrollbar-width: thin; }
+    .law-card { height: 300px; min-height: 0; position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 16px; border: 1px solid rgba(94,119,102,.08); border-radius: 15px; box-shadow: 0 6px 18px rgba(56,93,75,.045); cursor: pointer; scroll-snap-align: start; transition: transform .22s ease, box-shadow .22s ease; animation: rise .35s ease both; }
     .law-card:hover { transform: translateY(-4px) rotate(-.3deg); box-shadow: 0 13px 23px rgba(56,93,75,.11); }
     .law-card[hidden] { display: none; }
     .law-card.mint-card { background: #e6f3e8; }
@@ -205,7 +205,7 @@
     @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
     @media (max-width: 1050px) {
       .layout { padding-right: 28px; padding-left: 28px; grid-template-columns: 160px minmax(0, 1fr); gap: 26px; }
-      .law-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .law-grid { grid-auto-columns: 200px; }
       .hero { grid-template-columns: minmax(0, 1fr) 28%; }
     }
     @media (max-width: 720px) {
@@ -255,8 +255,8 @@
       .search-form button svg { width: 17px; height: 17px; }
       .response { margin-right: 12px; margin-left: 12px; }
       .section-heading { margin-top: 31px; }
-      .law-grid { gap: 10px; }
-      .law-card { min-height: 214px; padding: 13px; }
+      .law-grid { grid-auto-columns: 190px; gap: 10px; }
+      .law-card { height: 280px; padding: 13px; }
       .law-card h3 { font-size: 16px; }
       .law-toolbar { align-items: flex-start; }
       .filters { gap: 5px; }
@@ -268,8 +268,8 @@
     @media (max-width: 390px) {
       .layout { padding-right: 13px; padding-left: 13px; }
       .sidebar { margin-right: -13px; margin-left: -13px; }
-      .law-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .law-card { min-height: 225px; padding: 11px; }
+      .law-grid { grid-auto-columns: 172px; gap: 8px; }
+      .law-card { height: 260px; padding: 11px; }
       .card-bottom { font-size: 8px; }
       .filters { max-width: 275px; }
       .section-heading h2 { font-size: 21px; }
@@ -391,7 +391,7 @@
 
         <section id="law-library" aria-labelledby="library-title">
           <div class="section-heading">
-            <div><p class="section-kicker">A good place to begin</p><h2 id="library-title">The law shelf</h2></div>
+              <div><p class="section-kicker">Swipe through the essentials</p><h2 id="library-title">Law flashcards</h2></div>
             <a href="#law-library" id="view-all">Explore the library <i data-lucide="arrow-right"></i></a>
           </div>
           <div class="law-toolbar">
@@ -403,7 +403,7 @@
             </div>
             <div class="deck-controls"><button class="icon-button" type="button" id="prev-laws" title="Previous laws" aria-label="Previous laws"><i data-lucide="arrow-left"></i></button><button class="icon-button" type="button" id="next-laws" title="Next laws" aria-label="Next laws"><i data-lucide="arrow-right"></i></button></div>
           </div>
-          <div class="law-grid" id="law-grid" aria-live="polite"></div>
+          <div class="law-grid" id="law-grid" role="region" tabindex="0" aria-label="Indian education law flashcards, horizontally scrollable" aria-live="polite"></div>
         </section>
 
         <section class="below-grid" id="recent-activity">
