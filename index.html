@@ -145,16 +145,31 @@
     .icon-button { width: 32px; height: 32px; display: grid; place-items: center; border: 1px solid #e2eae3; border-radius: 50%; background: var(--white); color: #61796b; cursor: pointer; transition: background .15s ease, transform .15s ease; }
     .icon-button:hover { background: #e8f3e9; transform: translateY(-1px); }
     .icon-button svg { width: 15px; height: 15px; }
-    .law-grid { display: grid; grid-auto-flow: column; grid-auto-columns: 210px; gap: 13px; overflow-x: auto; padding: 4px 2px 14px; overscroll-behavior-x: contain; scroll-padding-inline: 2px; scroll-snap-type: x mandatory; scrollbar-color: #c7dccb transparent; scrollbar-width: thin; }
-    .law-card { height: 300px; min-height: 0; position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 16px; border: 1px solid rgba(94,119,102,.08); border-radius: 15px; box-shadow: 0 6px 18px rgba(56,93,75,.045); cursor: pointer; scroll-snap-align: start; transition: transform .22s ease, box-shadow .22s ease; animation: rise .35s ease both; }
-    .law-card:hover { transform: translateY(-4px) rotate(-.3deg); box-shadow: 0 13px 23px rgba(56,93,75,.11); }
+    .law-grid { position: relative; display: grid; grid-auto-flow: column; grid-auto-columns: 230px; align-items: center; gap: 23px; min-height: 430px; overflow-x: auto; padding: 70px 24px 35px; border: 1px solid #dce9dc; background-color: #eaf3e9; background-image: linear-gradient(rgba(79,117,86,.055) 1px, transparent 1px), linear-gradient(90deg, rgba(79,117,86,.055) 1px, transparent 1px); background-size: 28px 28px; overscroll-behavior-x: contain; scroll-padding-inline: 24px; scroll-snap-type: x mandatory; scrollbar-color: #a9c5ad transparent; scrollbar-width: thin; }
+    .law-grid::before { content: "L A W"; position: absolute; z-index: 0; top: -16px; left: 17px; color: #b8d2bb; font: 600 112px/.95 var(--serif); white-space: nowrap; pointer-events: none; }
+    .law-grid::after { content: "RIGHTS  /  RULES  /  SCHOOLS"; position: absolute; z-index: 0; top: 28px; right: 20px; color: #6b8a71; font-size: 9px; font-weight: 700; letter-spacing: 1.4px; pointer-events: none; }
+    .law-card { z-index: 1; height: 350px; min-height: 0; position: relative; overflow: hidden; display: flex; flex-direction: column; padding: 15px; border: 1px solid rgba(94,119,102,.13); border-radius: 10px; box-shadow: 0 12px 25px rgba(56,93,75,.12); cursor: pointer; scroll-snap-align: center; transition: transform .3s cubic-bezier(.2,.75,.25,1), box-shadow .22s ease; animation: rise .35s ease both; }
+    .law-card:nth-child(6n+1) { transform: translateY(8px) rotate(-1.5deg); }
+    .law-card:nth-child(6n+2) { transform: translateY(-25px) rotate(1.2deg); }
+    .law-card:nth-child(6n+3) { transform: translateY(15px) rotate(-.7deg); }
+    .law-card:nth-child(6n+4) { transform: translateY(-18px) rotate(1.7deg); }
+    .law-card:nth-child(6n+5) { transform: translateY(10px) rotate(-1.1deg); }
+    .law-card:nth-child(6n) { transform: translateY(-22px) rotate(.8deg); }
+    .law-card:hover { transform: translateY(-10px) rotate(0) scale(1.025); box-shadow: 0 19px 32px rgba(56,93,75,.19); }
     .law-card[hidden] { display: none; }
     .law-card.mint-card { background: #e6f3e8; }
     .law-card.sky-card { background: #e6f2f8; }
     .law-card.rose-card { background: #faeae4; }
     .law-card.lilac-card { background: #f0eaf7; }
     .law-card.butter-card { background: #fbf2d9; }
-    .card-top { display: flex; align-items: center; justify-content: space-between; }
+    .law-card-art { height: 105px; flex: 0 0 auto; position: relative; display: flex; align-items: center; justify-content: center; overflow: hidden; margin: -15px -15px 13px; border-bottom: 1px solid rgba(69,101,79,.12); background: repeating-linear-gradient(135deg, rgba(255,255,255,.13) 0 9px, transparent 9px 19px), rgba(255,255,255,.3); }
+    .law-card-art::before { content: ""; position: absolute; width: 100px; height: 100px; right: -17px; top: 18px; border: 1px solid rgba(69,101,79,.2); border-radius: 50%; box-shadow: 0 0 0 12px rgba(255,255,255,.1), 0 0 0 25px rgba(255,255,255,.09); }
+    .law-card-index { position: absolute; z-index: 1; top: 11px; left: 12px; color: #67816b; font-size: 9px; font-weight: 700; letter-spacing: .9px; }
+    .law-card-art .law-icon { z-index: 1; width: 55px; height: 55px; border-radius: 18px; background: rgba(255,254,250,.77); box-shadow: 0 6px 16px rgba(56,93,75,.09); }
+    .law-card-art .law-icon svg { width: 25px; height: 25px; }
+    .law-card-art .save-button { position: absolute; z-index: 2; top: 8px; right: 8px; background: rgba(255,254,250,.72); }
+    .law-card-caption { position: absolute; bottom: 9px; left: 12px; color: #69816d; font-size: 8px; font-weight: 700; letter-spacing: 1.1px; }
+    .law-card-copy { min-height: 0; flex: 1; display: flex; flex-direction: column; }
     .law-icon { width: 35px; height: 35px; display: grid; place-items: center; border: 1px solid rgba(69,101,79,.1); border-radius: 11px; background: rgba(255,255,255,.55); color: #557661; }
     .law-icon svg { width: 17px; height: 17px; }
     .save-button { width: 30px; height: 30px; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; color: #77907e; cursor: pointer; }
@@ -162,7 +177,7 @@
     .save-button svg { width: 15px; height: 15px; }
     .law-type { display: inline-flex; align-items: center; width: fit-content; margin-top: 14px; padding: 4px 7px; border-radius: 999px; background: rgba(255,255,255,.55); color: #687d6e; font-size: 9px; font-weight: 700; letter-spacing: .3px; text-transform: uppercase; }
     .law-card h3 { margin: 7px 0 5px; font: 500 17px/1.12 var(--serif); }
-    .law-card p { margin: 0; color: #6c7a71; font-size: 10px; line-height: 1.5; }
+    .law-card p { display: -webkit-box; overflow: hidden; margin: 0; color: #6c7a71; font-size: 10px; line-height: 1.5; line-clamp: 3; -webkit-box-orient: vertical; -webkit-line-clamp: 3; }
     .card-bottom { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; padding-top: 12px; color: #6f8175; font-size: 9px; }
     .card-bottom span:last-child { display: flex; align-items: center; gap: 4px; }
     .card-bottom svg { width: 12px; height: 12px; }
@@ -205,7 +220,7 @@
     @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
     @media (max-width: 1050px) {
       .layout { padding-right: 28px; padding-left: 28px; grid-template-columns: 160px minmax(0, 1fr); gap: 26px; }
-      .law-grid { grid-auto-columns: 200px; }
+      .law-grid { grid-auto-columns: 210px; }
       .hero { grid-template-columns: minmax(0, 1fr) 28%; }
     }
     @media (max-width: 720px) {
@@ -255,8 +270,15 @@
       .search-form button svg { width: 17px; height: 17px; }
       .response { margin-right: 12px; margin-left: 12px; }
       .section-heading { margin-top: 31px; }
-      .law-grid { grid-auto-columns: 190px; gap: 10px; }
-      .law-card { height: 280px; padding: 13px; }
+      .law-grid { grid-auto-columns: 190px; min-height: 400px; gap: 16px; padding: 65px 16px 28px; }
+      .law-grid::before { top: -4px; left: 12px; font-size: 84px; }
+      .law-grid::after { display: none; }
+      .law-card { height: 320px; padding: 13px; }
+      .law-card-art { height: 94px; margin: -13px -13px 11px; }
+      .law-card:nth-child(n) { transform: none; }
+      .law-card:nth-child(3n+2) { transform: translateY(-12px) rotate(1deg); }
+      .law-card:nth-child(3n) { transform: translateY(8px) rotate(-.8deg); }
+      .law-card:hover { transform: translateY(-7px) rotate(0) scale(1.015); }
       .law-card h3 { font-size: 16px; }
       .law-toolbar { align-items: flex-start; }
       .filters { gap: 5px; }
@@ -268,8 +290,10 @@
     @media (max-width: 390px) {
       .layout { padding-right: 13px; padding-left: 13px; }
       .sidebar { margin-right: -13px; margin-left: -13px; }
-      .law-grid { grid-auto-columns: 172px; gap: 8px; }
-      .law-card { height: 260px; padding: 11px; }
+      .law-grid { grid-auto-columns: 172px; min-height: 375px; gap: 12px; padding-right: 12px; padding-left: 12px; }
+      .law-grid::before { font-size: 72px; }
+      .law-card { height: 306px; padding: 11px; }
+      .law-card-art { height: 88px; margin: -11px -11px 10px; }
       .card-bottom { font-size: 8px; }
       .filters { max-width: 275px; }
       .section-heading h2 { font-size: 21px; }
@@ -469,11 +493,17 @@
     }
     function renderLaws() {
       const records = LEGAL_LIBRARY.filter((law) => activeFilter === "saved" ? savedIds.has(law.id) : activeFilter === "all" || law.category === activeFilter);
-      lawGrid.innerHTML = records.map((law) => `
+      lawGrid.innerHTML = records.map((law, index) => `
         <article class="law-card ${law.color}" data-law-id="${law.id}" tabindex="0" aria-label="Read about ${law.title}">
-          <div class="card-top"><span class="law-icon"><i data-lucide="${law.icon}"></i></span><button class="save-button ${savedIds.has(law.id) ? "saved" : ""}" type="button" data-save-id="${law.id}" aria-label="${savedIds.has(law.id) ? "Remove saved" : "Save"} ${law.title}" aria-pressed="${savedIds.has(law.id)}"><i data-lucide="${savedIds.has(law.id) ? "bookmark-check" : "bookmark"}"></i></button></div>
-          <span class="law-type">${law.type}</span><h3>${law.title}</h3><p>${law.summary}</p>
-          <div class="card-bottom"><span>${law.year}</span><span>Read guide <i data-lucide="arrow-up-right"></i></span></div>
+          <div class="law-card-art">
+            <span class="law-card-index">${String(index + 1).padStart(2, "0")} / ${String(records.length).padStart(2, "0")}</span>
+            <span class="law-icon"><i data-lucide="${law.icon}"></i></span>
+            <span class="law-card-caption">EDUCATION / INDIA</span>
+            <button class="save-button ${savedIds.has(law.id) ? "saved" : ""}" type="button" data-save-id="${law.id}" aria-label="${savedIds.has(law.id) ? "Remove saved" : "Save"} ${law.title}" aria-pressed="${savedIds.has(law.id)}"><i data-lucide="${savedIds.has(law.id) ? "bookmark-check" : "bookmark"}"></i></button>
+          </div>
+          <div class="law-card-copy"><span class="law-type">${law.type}</span><h3>${law.title}</h3><p>${law.summary}</p>
+            <div class="card-bottom"><span>${law.year}</span><span>Read guide <i data-lucide="arrow-up-right"></i></span></div>
+          </div>
         </article>`).join("");
       document.getElementById("saved-count").textContent = savedIds.size ? `${savedIds.size} ${savedIds.size === 1 ? "law" : "laws"} saved to your reading list.` : "No laws saved yet. Tap a bookmark to keep one close.";
       renderIcons();
@@ -575,8 +605,8 @@
       document.querySelectorAll(".filter-button").forEach((filter) => filter.classList.toggle("selected", filter.dataset.filter === "all"));
       renderLaws();
     });
-    document.getElementById("next-laws").addEventListener("click", () => lawGrid.scrollBy({ left: lawGrid.clientWidth * .7, behavior: "smooth" }));
-    document.getElementById("prev-laws").addEventListener("click", () => lawGrid.scrollBy({ left: -lawGrid.clientWidth * .7, behavior: "smooth" }));
+    document.getElementById("next-laws").addEventListener("click", () => lawGrid.scrollBy({ left: lawGrid.clientWidth * .7, behavior: "instant" }));
+    document.getElementById("prev-laws").addEventListener("click", () => lawGrid.scrollBy({ left: -lawGrid.clientWidth * .7, behavior: "instant" }));
     document.getElementById("open-auth").addEventListener("click", () => {
       document.getElementById("portal").hidden = true;
       document.getElementById("login-page").hidden = false;
